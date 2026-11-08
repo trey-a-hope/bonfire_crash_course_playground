@@ -1,0 +1,43 @@
+# Project metadata
+name: bonfire_crash_course_playground
+description: "Bonfire Crash Course playground: a sandbox copy of the template."
+publish_to: "none" # Prevents accidental publishing to pub.dev
+version: 1.0.0+1
+
+# Dart SDK constraints
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+# Production dependencies
+dependencies:
+  bonfire: ^4.0.0 # 2D RPG game engine built on top of Flame
+  flutter:
+    sdk: flutter
+
+# Development and testing dependencies
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0 # Recommended Flutter lint rules
+
+# Pinned Flame version to guarantee compatibility with Bonfire 3.17.2
+dependency_overrides:
+  flame: 1.37.0
+
+# Flutter-specific configurations and assets
+flutter:
+  uses-material-design: true
+
+  # Asset directories for game sprites, tiles, and backgrounds
+  assets:
+    - assets/images/
+    - assets/images/background/
+    - assets/images/decorations/
+    - assets/images/characters/shark/
+    - assets/images/characters/wizard/
+    - assets/images/characters/lizardfolk/
+    - assets/images/characters/strawberry/
+    - assets/images/maps/
+    - assets/images/maps/01/
+    - assets/images/maps/01/map/
+    - assets/images/maps/02/map/
