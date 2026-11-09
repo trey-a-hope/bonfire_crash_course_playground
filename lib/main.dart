@@ -25,5 +25,3 @@ class BonfireCrashCourseApp extends StatelessWidget {
     );
   }
 }
-
-// hero, companion, foe
