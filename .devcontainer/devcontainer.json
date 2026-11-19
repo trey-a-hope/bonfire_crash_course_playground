@@ -10,7 +10,8 @@
       "settings": {
         "dart.flutterSdkPath": "/sdks/flutter",
         "dart.openDevTools": "never",
-        "dart.hotReloadOnSave": "all"
+        "dart.hotReloadOnSave": "all",
+        "workbench.colorTheme": "Default Dark Modern"
       }
     }
   },
