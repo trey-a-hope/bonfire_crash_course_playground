@@ -1,5 +1,7 @@
 import 'package:bonfire_crash_course_playground/presentation/screens/game_screen.dart';
-import 'package:flutter/material.dart';
+// Material widgets now come from the standalone `material_ui` package
+// instead of `package:flutter/material.dart`.
+import 'package:material_ui/material_ui.dart';
 
 /// The entry point of the Flutter application.
 void main() {

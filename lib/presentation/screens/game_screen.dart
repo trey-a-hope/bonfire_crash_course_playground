@@ -1,4 +1,6 @@
-import 'package:flutter/material.dart' hide Hero;
+// Material widgets now come from the standalone `material_ui` package
+// instead of `package:flutter/material.dart`.
+import 'package:material_ui/material_ui.dart';
 
 class GameScreen extends StatefulWidget {
   const GameScreen({

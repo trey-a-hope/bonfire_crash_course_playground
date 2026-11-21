@@ -13,6 +13,7 @@ dependencies:
   bonfire: ^4.0.0 # 2D RPG game engine built on top of Flame
   flutter:
     sdk: flutter
+  material_ui: ^1.11.1 # Material widgets, used in place of flutter/material.dart
 
 # Development and testing dependencies
 dev_dependencies:
