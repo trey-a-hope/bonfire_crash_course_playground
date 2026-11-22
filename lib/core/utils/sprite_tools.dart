@@ -1,14 +1,16 @@
-// lib/presentation/characters/util/animation_utils.dart
+// lib/core/utils/sprite_tools.dart
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire_crash_course_playground/core/constants/character_asset.dart';
 import 'package:bonfire_crash_course_playground/core/constants/globals.dart';
 
-enum AnimationUtilsDirection { IDLE_RIGHT, RUN_RIGHT, IDLE_LEFT, RUN_LEFT }
+/// Which movement sheet to load: standing still or running, facing left or
+/// right.
+enum SpriteDirection { IDLE_RIGHT, RUN_RIGHT, IDLE_LEFT, RUN_LEFT }
 
 /// Utility helpers for loading sprite animations.
-abstract class AnimationUtils {
+abstract class SpriteTools {
   /// Turns a sprite sheet into a looping animation.
   ///
   /// - [path]: Asset path relative to `assets/images/`.
@@ -20,7 +22,7 @@ abstract class AnimationUtils {
   /// - [start]: The frame (0-based) to start from (defaults to 0). With
   ///   `amount: 1` it picks out a single frame, such as the last frame of a
   ///   death sheet to hold once the animation is over.
-  static Future<SpriteAnimation> loadAnimation({
+  static Future<SpriteAnimation> _loadAnimation({
     required String path,
     int amount = 4,
     double stepTime = 0.1,
@@ -41,9 +43,18 @@ abstract class AnimationUtils {
     );
   }
 
+  /// Builds an idle or run animation for a character.
+  ///
+  /// - [asset]: The character whose sprite sheets to use.
+  /// - [direction]: Which sheet to load (idle/run, left/right).
+  /// - [amount]: Number of frames in the sheet (defaults to 4).
+  /// - [stepTime]: Duration (in seconds) per frame (defaults to 0.2).
+  /// - [textureSize]: Frame dimension (defaults to 32x32).
+  /// - [loop]: Whether the animation repeats (defaults to true).
+  /// - [start]: The frame (0-based) to start from (defaults to 0).
   static Future<SpriteAnimation> buildMoveAnimation({
     required CharacterAsset asset,
-    required AnimationUtilsDirection direction,
+    required SpriteDirection direction,
     int amount = 4,
     double stepTime = 0.2,
     Vector2? textureSize,
@@ -52,19 +63,21 @@ abstract class AnimationUtils {
   }) async {
     final size = textureSize ?? Vector2.all(32);
 
+    // Pick the sprite sheet that matches the requested direction.
     late String path;
 
     switch (direction) {
-      case AnimationUtilsDirection.IDLE_RIGHT:
+      case SpriteDirection.IDLE_RIGHT:
         path = asset.idleRight;
-      case AnimationUtilsDirection.RUN_RIGHT:
+      case SpriteDirection.RUN_RIGHT:
         path = asset.runRight;
-      case AnimationUtilsDirection.IDLE_LEFT:
+      case SpriteDirection.IDLE_LEFT:
         path = asset.idleLeft;
-      case AnimationUtilsDirection.RUN_LEFT:
-        path = asset.runRight;
+      case SpriteDirection.RUN_LEFT:
+        path = asset.runLeft;
     }
 
+    // Slice the sheet into frames laid out left to right, starting at [start].
     return await SpriteAnimation.load(
       path,
       SpriteAnimationData.sequenced(
@@ -77,6 +90,14 @@ abstract class AnimationUtils {
     );
   }
 
+  /// Plays an attack animation once, facing the way the character is looking.
+  ///
+  /// - [attackLeft] / [attackRight]: Keys of the attack animations registered
+  ///   as `others` on [animation] (see [buildAttackAnimations]).
+  /// - [animation]: The character's animation set to play on.
+  /// - [direction]: The direction the character is facing; any left-side
+  ///   direction plays [attackLeft], everything else plays [attackRight].
+  /// - [onFinish]: Called once the attack animation has run to the end.
   static Future<void> playAttackAnimation({
     required String attackLeft,
     required String attackRight,
@@ -97,7 +118,7 @@ abstract class AnimationUtils {
   }) {
     // One picture sheet turned into an animation.
     // We call this once for each sheet we need.
-    Future<SpriteAnimation> load(String path) => AnimationUtils.loadAnimation(
+    Future<SpriteAnimation> load(String path) => _loadAnimation(
           path: path,
           amount: frames,
         );
@@ -116,8 +137,7 @@ abstract class AnimationUtils {
   }) {
     // One attack sheet turned into a one-time animation.
     // Attacks play once and stop, so loop is false.
-    Future<SpriteAnimation> load(String path, int frames) =>
-        AnimationUtils.loadAnimation(
+    Future<SpriteAnimation> load(String path, int frames) => _loadAnimation(
           path: path,
           amount: frames,
           stepTime: ATTACK_STEP_TIME,
