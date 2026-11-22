@@ -31,6 +31,7 @@
       "visibility": "public"
     }
   },
-  "postCreateCommand": "flutter config --enable-web && flutter pub get",
+  // "postCreateCommand": "flutter config --enable-web && flutter pub get",
+  "postCreateCommand": "flutter channel beta && flutter upgrade && flutter config --enable-web && flutter pub get",
   "remoteUser": "root"
 }
