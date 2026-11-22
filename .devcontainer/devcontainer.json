@@ -1,6 +1,6 @@
 {
   "name": "Flutter Bonfire Lab",
-  "image": "ghcr.io/cirruslabs/flutter:latest",
+  "image": "ghcr.io/cirruslabs/flutter:stable",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -31,7 +31,6 @@
       "visibility": "public"
     }
   },
-  // "postCreateCommand": "flutter config --enable-web && flutter pub get",
-  "postCreateCommand": "flutter channel beta && flutter upgrade && flutter config --enable-web && flutter pub get",
+  "postCreateCommand": "git -C /sdks/flutter fetch --tags --force && git -C /sdks/flutter checkout 3.50.1 && flutter --version && flutter config --enable-web && flutter pub get",
   "remoteUser": "root"
 }
