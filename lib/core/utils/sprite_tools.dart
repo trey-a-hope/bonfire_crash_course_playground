@@ -52,7 +52,7 @@ abstract class SpriteTools {
   /// - [textureSize]: Frame dimension (defaults to 32x32).
   /// - [loop]: Whether the animation repeats (defaults to true).
   /// - [start]: The frame (0-based) to start from (defaults to 0).
-  static Future<SpriteAnimation> buildMoveAnimation({
+  static Future<SpriteAnimation> _buildAnimation({
     required CharacterAsset asset,
     required SpriteDirection direction,
     int amount = 4,
@@ -89,6 +89,21 @@ abstract class SpriteTools {
       ),
     );
   }
+
+  static PlatformAnimations buildAnimations({
+    required CharacterAsset asset,
+    int frames = 6, // how many pictures are in the jump sheet
+  }) =>
+      PlatformAnimations(
+        idleRight: _buildAnimation(
+            asset: asset, direction: SpriteDirection.IDLE_RIGHT),
+        idleLeft:
+            _buildAnimation(asset: asset, direction: SpriteDirection.IDLE_LEFT),
+        runRight:
+            _buildAnimation(asset: asset, direction: SpriteDirection.RUN_RIGHT),
+        runLeft:
+            _buildAnimation(asset: asset, direction: SpriteDirection.RUN_LEFT),
+      );
 
   /// Plays an attack animation once, facing the way the character is looking.
   ///
