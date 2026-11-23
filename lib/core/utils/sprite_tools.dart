@@ -1,4 +1,3 @@
-// lib/core/utils/sprite_tools.dart
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
@@ -90,7 +89,7 @@ abstract class SpriteTools {
     );
   }
 
-  static PlatformAnimations buildAnimations({
+  static PlatformAnimations buildAnimation({
     required CharacterAsset asset,
     int frames = 6, // how many pictures are in the jump sheet
   }) =>
@@ -103,6 +102,8 @@ abstract class SpriteTools {
             _buildAnimation(asset: asset, direction: SpriteDirection.RUN_RIGHT),
         runLeft:
             _buildAnimation(asset: asset, direction: SpriteDirection.RUN_LEFT),
+        jump: _buildJumpAnimations(asset: asset),
+        others: _buildAttackAnimations(asset: asset),
       );
 
   /// Plays an attack animation once, facing the way the character is looking.
@@ -127,7 +128,7 @@ abstract class SpriteTools {
       );
 
   /// Builds the jump animations for any character.
-  static PlatformJumpAnimations buildJumpAnimations({
+  static PlatformJumpAnimations _buildJumpAnimations({
     required CharacterAsset asset,
     int frames = 6, // how many pictures are in the jump sheet
   }) {
@@ -147,7 +148,7 @@ abstract class SpriteTools {
   }
 
   /// Builds the melee and range attack animations for any character.
-  static Map<String, Future<SpriteAnimation>> buildAttackAnimations({
+  static Map<String, Future<SpriteAnimation>> _buildAttackAnimations({
     required CharacterAsset asset,
   }) {
     // One attack sheet turned into a one-time animation.
@@ -166,4 +167,25 @@ abstract class SpriteTools {
       RANGE_ATTACK_RIGHT: load(asset.attackRangeRight, asset.attackRangeFrames),
     };
   }
+
+  /// Loads the projectile animation for a ranged attack, facing the way the
+  /// character is looking.
+  ///
+  /// - [asset]: The character whose projectile sheets to use.
+  /// - [direction]: The direction the character is facing; any left-side
+  ///   direction loads the left sheet, everything else loads the right one.
+  /// - [amount]: Number of frames in the sheet (defaults to 4).
+  /// - [textureSize]: Frame dimension (defaults to 16x16).
+  static Future<SpriteAnimation> loadProjectileAnimation({
+    required CharacterAsset asset,
+    required Direction direction,
+    int amount = 4,
+    Vector2? textureSize,
+  }) =>
+      _loadAnimation(
+        path:
+            direction.isLeftSide ? asset.projectileLeft : asset.projectileRight,
+        amount: amount,
+        textureSize: textureSize ?? Vector2.all(16),
+      );
 }
