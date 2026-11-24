@@ -103,13 +103,13 @@ abstract class SpriteTools {
         runLeft:
             _buildAnimation(asset: asset, direction: SpriteDirection.RUN_LEFT),
         jump: _buildJumpAnimations(asset: asset),
-        others: _buildAttackAnimations(asset: asset),
+        others: _buildOtherAnimations(asset: asset),
       );
 
   /// Plays an attack animation once, facing the way the character is looking.
   ///
   /// - [attackLeft] / [attackRight]: Keys of the attack animations registered
-  ///   as `others` on [animation] (see [buildAttackAnimations]).
+  ///   as `others` on [animation] (see [_buildOtherAnimations]).
   /// - [animation]: The character's animation set to play on.
   /// - [direction]: The direction the character is facing; any left-side
   ///   direction plays [attackLeft], everything else plays [attackRight].
@@ -147,24 +147,50 @@ abstract class SpriteTools {
     );
   }
 
-  /// Builds the melee and range attack animations for any character.
-  static Map<String, Future<SpriteAnimation>> _buildAttackAnimations({
+  /// Builds the one-shot "other" animations for any character: melee and
+  /// range attacks, hurt and death.
+  static Map<String, Future<SpriteAnimation>> _buildOtherAnimations({
     required CharacterAsset asset,
   }) {
-    // One attack sheet turned into a one-time animation.
-    // Attacks play once and stop, so loop is false.
-    Future<SpriteAnimation> load(String path, int frames) => _loadAnimation(
+    // One sheet turned into a one-time animation.
+    // These all play once and stop, so loop is false.
+    Future<SpriteAnimation> load(
+      String path,
+      int frames, {
+      double stepTime = 0.1,
+    }) =>
+        _loadAnimation(
           path: path,
           amount: frames,
-          stepTime: ATTACK_STEP_TIME,
+          stepTime: stepTime,
           loop: false,
         );
 
     return {
-      MELEE_ATTACK_LEFT: load(asset.attackMeleeLeft, asset.attackMeleeFrames),
-      MELEE_ATTACK_RIGHT: load(asset.attackMeleeRight, asset.attackMeleeFrames),
-      RANGE_ATTACK_LEFT: load(asset.attackRangeLeft, asset.attackRangeFrames),
-      RANGE_ATTACK_RIGHT: load(asset.attackRangeRight, asset.attackRangeFrames),
+      MELEE_ATTACK_LEFT: load(
+        asset.attackMeleeLeft,
+        asset.attackMeleeFrames,
+        stepTime: ATTACK_STEP_TIME,
+      ),
+      MELEE_ATTACK_RIGHT: load(
+        asset.attackMeleeRight,
+        asset.attackMeleeFrames,
+        stepTime: ATTACK_STEP_TIME,
+      ),
+      RANGE_ATTACK_LEFT: load(
+        asset.attackRangeLeft,
+        asset.attackRangeFrames,
+        stepTime: ATTACK_STEP_TIME,
+      ),
+      RANGE_ATTACK_RIGHT: load(
+        asset.attackRangeRight,
+        asset.attackRangeFrames,
+        stepTime: ATTACK_STEP_TIME,
+      ),
+      HURT_LEFT: load(asset.hurtLeft, asset.hurtFrames),
+      HURT_RIGHT: load(asset.hurtRight, asset.hurtFrames),
+      DEATH_LEFT: load(asset.deathLeft, asset.deathFrames),
+      DEATH_RIGHT: load(asset.deathRight, asset.deathFrames),
     };
   }
 
