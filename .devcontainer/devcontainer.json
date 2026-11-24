@@ -31,14 +31,6 @@
       "visibility": "public"
     }
   },
-  "containerEnv": {
-    // Caps how many of the game's ~1,700 debug scripts the browser downloads
-    // at once (Flutter's default is 1,000; this makes it 100). Through the
-    // Codespaces port forwarding, 1,000 at once makes some downloads fail,
-    // which shows a red "Library not defined ... Failed to initialize" screen.
-    // flutter_tools only reads this variable for that limit.
-    "LUCI_CONTEXT": ""
-  },
   "postCreateCommand": "git -C /sdks/flutter fetch --tags --force && git -C /sdks/flutter checkout 3.50.1 && flutter --version && flutter config --enable-web && flutter pub get",
   "remoteUser": "root"
 }

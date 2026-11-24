@@ -6,12 +6,6 @@ A small side-scrolling platformer built with Flutter and [Bonfire](https://pub.d
 
 In a GitHub Codespace, the dev container runs `flutter config --enable-web && flutter pub get` for you. Then start the **Codespaces** launch configuration in VS Code, which serves the game on port 8080.
 
-### Hot restart on the web reloads the page
-
-In a debug build on the web, a hot restart reloads the whole page instead of restarting the app in place (`lib/core/web/hot_restart_reload_web.dart`). Flutter web keeps 3 WebGL contexts from every hot restart and Chrome only allows 16 on a page, so after about 5 restarts Chrome starts dropping them and the console fills with "Too many active WebGL contexts" warnings and shader errors. Hot reload is unchanged and still keeps the game's state.
-
-The dev container also sets `LUCI_CONTEXT`, which makes Flutter download the game's debug scripts 100 at a time instead of 1,000. Through the Codespaces port forwarding, 1,000 at once makes some downloads fail and the game shows a red "Library not defined" screen.
-
 On your own machine:
 
 ```sh

@@ -1,2 +1,2 @@
-- Hot restart on the web now reloads the page, so Chrome no longer runs out of WebGL contexts ("Too many active WebGL contexts" and shader errors) after a few restarts.
-- The Codespace now downloads the game's debug scripts 100 at a time, which stops the red "Library not defined" screen.
+- BCC-35: Added a medieval lizardfolk warrior (generated with Sprite Fusion) with the full animation set: idle, walk, jump, hurt, death, spear thrust and acid spit.
+- The lizardfolk now patrols map 02 as a foe, and any character's sprites can be used for a foe.
