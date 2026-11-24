@@ -1,3 +1,4 @@
+import 'package:bonfire_crash_course_playground/core/web/hot_restart_reload.dart';
 import 'package:bonfire_crash_course_playground/presentation/screens/game_screen.dart';
 // Material widgets now come from the standalone `material_ui` package
 // instead of `package:flutter/material.dart`.
@@ -5,6 +6,10 @@ import 'package:material_ui/material_ui.dart';
 
 /// The entry point of the Flutter application.
 void main() {
+  // On the web, a hot restart leaks WebGL contexts until Chrome starts
+  // dropping them, so reload the page instead (see hot_restart_reload_web.dart).
+  if (reloadPageInsteadOfHotRestart()) return;
+
   runApp(const BonfireCrashCourseApp());
 }
 
