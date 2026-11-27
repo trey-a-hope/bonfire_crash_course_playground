@@ -4,23 +4,24 @@ import 'package:bonfire/bonfire.dart';
 import 'package:bonfire_crash_course_playground/core/constants/character_asset.dart';
 import 'package:bonfire_crash_course_playground/core/constants/globals.dart';
 
-/// Which movement sheet to load: standing still or running, facing left or
-/// right.
+/// Which way the character is facing, and if they're standing still or
+/// running.
 enum SpriteDirection { IDLE_RIGHT, RUN_RIGHT, IDLE_LEFT, RUN_LEFT }
 
-/// Utility helpers for loading sprite animations.
+/// Tools for turning pictures into animations.
+///
+/// A sprite sheet is one picture with every frame of an animation lined up
+/// side by side, like a flip book laid out in a row.
 abstract class SpriteTools {
-  /// Turns a sprite sheet into a looping animation.
+  /// Turns a sprite sheet into an animation.
   ///
-  /// - [path]: Asset path relative to `assets/images/`.
-  /// - [amount]: Number of frames in the sheet (defaults to 4).
-  /// - [stepTime]: Duration (in seconds) per frame.
-  /// - [textureSize]: Frame dimension (defaults to 32x32).
-  /// - [loop]: Whether the animation repeats (defaults to true). Use false for
-  ///   one-shot animations such as attacks.
-  /// - [start]: The frame (0-based) to start from (defaults to 0). With
-  ///   `amount: 1` it picks out a single frame, such as the last frame of a
-  ///   death sheet to hold once the animation is over.
+  /// - [path]: Where the picture is, inside `assets/images/`.
+  /// - [amount]: How many frames are in the picture.
+  /// - [stepTime]: How many seconds each frame stays on screen.
+  /// - [textureSize]: How big one frame is. Starts at 32 by 32 pixels.
+  /// - [loop]: If true, the animation plays over and over. Use false for
+  ///   things that happen once, like an attack.
+  /// - [start]: Which frame to start on. The first frame is 0.
   static Future<SpriteAnimation> _loadAnimation({
     required String path,
     int amount = 4,
@@ -42,15 +43,15 @@ abstract class SpriteTools {
     );
   }
 
-  /// Builds an idle or run animation for a character.
+  /// Makes a standing or running animation for a character.
   ///
-  /// - [asset]: The character whose sprite sheets to use.
-  /// - [direction]: Which sheet to load (idle/run, left/right).
-  /// - [amount]: Number of frames in the sheet (defaults to 4).
-  /// - [stepTime]: Duration (in seconds) per frame (defaults to 0.2).
-  /// - [textureSize]: Frame dimension (defaults to 32x32).
-  /// - [loop]: Whether the animation repeats (defaults to true).
-  /// - [start]: The frame (0-based) to start from (defaults to 0).
+  /// - [asset]: The character to use.
+  /// - [direction]: Which animation to make, like running left.
+  /// - [amount]: How many frames are in the picture.
+  /// - [stepTime]: How many seconds each frame stays on screen.
+  /// - [textureSize]: How big one frame is. Starts at 32 by 32 pixels.
+  /// - [loop]: If true, the animation plays over and over.
+  /// - [start]: Which frame to start on. The first frame is 0.
   static Future<SpriteAnimation> _buildAnimation({
     required CharacterAsset asset,
     required SpriteDirection direction,
@@ -62,7 +63,7 @@ abstract class SpriteTools {
   }) async {
     final size = textureSize ?? Vector2.all(32);
 
-    // Pick the sprite sheet that matches the requested direction.
+    // Pick the picture that matches the direction.
     late String path;
 
     switch (direction) {
@@ -76,7 +77,7 @@ abstract class SpriteTools {
         path = asset.runLeft;
     }
 
-    // Slice the sheet into frames laid out left to right, starting at [start].
+    // Cut the picture into frames, going left to right.
     return await SpriteAnimation.load(
       path,
       SpriteAnimationData.sequenced(
@@ -89,9 +90,10 @@ abstract class SpriteTools {
     );
   }
 
+  /// Makes every animation a character needs: standing, running, jumping,
+  /// attacking, getting hurt and dying.
   static PlatformAnimations buildAnimation({
     required CharacterAsset asset,
-    int frames = 6, // how many pictures are in the jump sheet
   }) =>
       PlatformAnimations(
         idleRight: _buildAnimation(
@@ -106,14 +108,13 @@ abstract class SpriteTools {
         others: _buildOtherAnimations(asset: asset),
       );
 
-  /// Plays an attack animation once, facing the way the character is looking.
+  /// Plays an attack one time, facing the way the character is looking.
   ///
-  /// - [attackLeft] / [attackRight]: Keys of the attack animations registered
-  ///   as `others` on [animation] (see [_buildOtherAnimations]).
-  /// - [animation]: The character's animation set to play on.
-  /// - [direction]: The direction the character is facing; any left-side
-  ///   direction plays [attackLeft], everything else plays [attackRight].
-  /// - [onFinish]: Called once the attack animation has run to the end.
+  /// - [attackLeft]: The name of the attack to play when facing left.
+  /// - [attackRight]: The name of the attack to play when facing right.
+  /// - [animation]: The character's animations.
+  /// - [direction]: Which way the character is facing.
+  /// - [onFinish]: Runs when the attack is done.
   static Future<void> playAttackAnimation({
     required String attackLeft,
     required String attackRight,
@@ -127,13 +128,13 @@ abstract class SpriteTools {
         onFinish: onFinish,
       );
 
-  /// Builds the jump animations for any character.
+  /// Makes the jumping animations for a character.
   static PlatformJumpAnimations _buildJumpAnimations({
     required CharacterAsset asset,
     int frames = 6, // how many pictures are in the jump sheet
   }) {
-    // One picture sheet turned into an animation.
-    // We call this once for each sheet we need.
+    // A small helper that turns one picture into an animation.
+    // We use it once for each picture we need.
     Future<SpriteAnimation> load(String path) => _loadAnimation(
           path: path,
           amount: frames,
@@ -147,12 +148,12 @@ abstract class SpriteTools {
     );
   }
 
-  /// Builds the one-shot "other" animations for any character: melee and
-  /// range attacks, hurt and death.
+  /// Makes the animations that play one time: attacking up close, shooting,
+  /// getting hurt and dying.
   static Map<String, Future<SpriteAnimation>> _buildOtherAnimations({
     required CharacterAsset asset,
   }) {
-    // One sheet turned into a one-time animation.
+    // A small helper that turns one picture into an animation.
     // These all play once and stop, so loop is false.
     Future<SpriteAnimation> load(
       String path,
@@ -194,14 +195,13 @@ abstract class SpriteTools {
     };
   }
 
-  /// Loads the projectile animation for a ranged attack, facing the way the
-  /// character is looking.
+  /// Makes the animation for the thing a character shoots, like a fireball,
+  /// facing the way the character is looking.
   ///
-  /// - [asset]: The character whose projectile sheets to use.
-  /// - [direction]: The direction the character is facing; any left-side
-  ///   direction loads the left sheet, everything else loads the right one.
-  /// - [amount]: Number of frames in the sheet (defaults to 4).
-  /// - [textureSize]: Frame dimension (defaults to 16x16).
+  /// - [asset]: The character to use.
+  /// - [direction]: Which way the character is facing.
+  /// - [amount]: How many frames are in the picture.
+  /// - [textureSize]: How big one frame is. Starts at 16 by 16 pixels.
   static Future<SpriteAnimation> loadProjectileAnimation({
     required CharacterAsset asset,
     required Direction direction,

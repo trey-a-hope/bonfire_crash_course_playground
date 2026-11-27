@@ -3,26 +3,28 @@ import 'package:bonfire_crash_course_playground/presentation/screens/game_screen
 // instead of `package:flutter/material.dart`.
 import 'package:material_ui/material_ui.dart';
 
-/// The entry point of the Flutter application.
+/// Where the app starts. This is the first code that runs.
 void main() {
   runApp(const BonfireCrashCourseApp());
 }
 
-/// Root widget of the application configuring the theme and initial route.
+/// The whole app. It sets the app's name, colors and first screen.
 class BonfireCrashCourseApp extends StatelessWidget {
   const BonfireCrashCourseApp({super.key});
 
+  /// Draws the app.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // Hides the red "DEBUG" label in the corner.
       debugShowCheckedModeBanner: false,
       title: 'Bonfire Crash Course Playground',
-      // Configure global visual styling and Material 3 design system
+      // The app's colors, all based on deep purple.
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      // Entry screen displaying the Bonfire game view
+      // The first screen you see when the app opens.
       home: const GameScreen(),
     );
   }

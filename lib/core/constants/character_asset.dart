@@ -1,11 +1,11 @@
 import 'package:bonfire_crash_course_playground/core/constants/globals.dart';
 
-/// Represents available character asset configurations.
+/// The characters in our game, and the pictures each one uses.
 ///
-/// Encapsulates sprite sheet paths for each directional movement state
-/// (idle, walking, and jumping) used to build character animations in Bonfire.
+/// This is an enum: a list of choices that can't change. Each choice is one
+/// character.
 enum CharacterAsset {
-  /// Playable shark character sprite set.
+  /// The shark. It bites up close and shoots water balls.
   shark(
     id: 'shark',
     idleLeft: SHARK_IDLE_LEFT,
@@ -26,12 +26,12 @@ enum CharacterAsset {
     projectileRight: SHARK_PROJECTILE_RIGHT,
     attackMeleeFrames: 5,
     attackRangeFrames: 5,
-    attackRangeReleaseFrame: 3,
+    attackRangeReleaseFrame: 2,
     hurtFrames: 5,
     deathFrames: 4,
   ),
 
-  /// Wizard character sprite set.
+  /// The wizard. It shoots magic bolts.
   wizard(
     id: 'wizard',
     idleLeft: WIZARD_IDLE_LEFT,
@@ -52,13 +52,12 @@ enum CharacterAsset {
     projectileRight: WIZARD_PROJECTILE_RIGHT,
     attackMeleeFrames: 5,
     attackRangeFrames: 6,
-    attackRangeReleaseFrame: 5,
+    attackRangeReleaseFrame: 4,
     hurtFrames: 5,
     deathFrames: 4,
   ),
 
-  /// Medieval lizardfolk warrior sprite set: spear thrust for melee and an
-  /// acid spit for range. Generated with Sprite Fusion (BCC-35).
+  /// The lizardfolk warrior. It pokes with a spear up close and spits acid.
   lizardfolk(
     id: 'lizardfolk',
     idleLeft: LIZARDFOLK_IDLE_LEFT,
@@ -79,12 +78,12 @@ enum CharacterAsset {
     projectileRight: LIZARDFOLK_PROJECTILE_RIGHT,
     attackMeleeFrames: 6,
     attackRangeFrames: 6,
-    attackRangeReleaseFrame: 4,
+    attackRangeReleaseFrame: 3,
     hurtFrames: 6,
     deathFrames: 4,
   );
 
-  /// Creates a [CharacterAsset] mapping with all required animation asset paths.
+  /// Sets up a character. Every value has to be filled in.
   const CharacterAsset({
     required this.id,
     required this.idleLeft,
@@ -110,70 +109,70 @@ enum CharacterAsset {
     required this.deathFrames,
   });
 
-  /// Unique identifier for the character.
+  /// The character's name, like `'shark'`.
   final String id;
 
-  /// Asset path for the left-facing idle animation sprite sheet.
+  /// The picture for standing still, facing left.
   final String idleLeft;
 
-  /// Asset path for the right-facing idle animation sprite sheet.
+  /// The picture for standing still, facing right.
   final String idleRight;
 
-  /// Asset path for the left-facing walking animation sprite sheet.
+  /// The picture for walking, facing left.
   final String runLeft;
 
-  /// Asset path for the right-facing walking animation sprite sheet.
+  /// The picture for walking, facing right.
   final String runRight;
 
-  /// Asset path for the left-facing jumping animation sprite sheet.
+  /// The picture for jumping, facing left.
   final String jumpLeft;
 
-  /// Asset path for the right-facing jumping animation sprite sheet.
+  /// The picture for jumping, facing right.
   final String jumpRight;
 
-  /// Asset path for the left-facing melee attack sprite sheet.
+  /// The picture for attacking up close, facing left.
   final String attackMeleeLeft;
 
-  /// Asset path for the right-facing melee attack sprite sheet.
+  /// The picture for attacking up close, facing right.
   final String attackMeleeRight;
 
-  /// Asset path for the left-facing range attack sprite sheet.
+  /// The picture for shooting, facing left.
   final String attackRangeLeft;
 
-  /// Asset path for the right-facing range attack sprite sheet.
+  /// The picture for shooting, facing right.
   final String attackRangeRight;
 
-  /// Asset path for the left-facing hurt sprite sheet.
+  /// The picture for getting hurt, facing left.
   final String hurtLeft;
 
-  /// Asset path for the right-facing hurt sprite sheet.
+  /// The picture for getting hurt, facing right.
   final String hurtRight;
 
-  /// Asset path for the left-moving range attack projectile (16x16 frames).
+  /// The picture for the thing the character shoots, flying left.
   final String projectileLeft;
 
-  /// Asset path for the right-moving range attack projectile (16x16 frames).
+  /// The picture for the thing the character shoots, flying right.
   final String projectileRight;
 
-  /// Number of frames in the melee attack sheet.
+  /// How many frames are in the attacking up close picture.
   final int attackMeleeFrames;
 
-  /// Number of frames in the range attack sheet.
+  /// How many frames are in the shooting picture.
   final int attackRangeFrames;
 
-  /// The range attack frame (1-based) where the projectile leaves the
-  /// character, so the flying projectile picks up where the drawn one ends.
+  /// Which frame of the shooting animation lets go of the shot. The first
+  /// frame is 0.
   final int attackRangeReleaseFrame;
 
-  /// Number of frames in the hurt sheet.
+  /// How many frames are in the getting hurt picture.
   final int hurtFrames;
 
-  /// Asset path for the left-facing death sprite sheet.
+  /// The picture for dying, facing left.
   final String deathLeft;
 
-  /// Asset path for the right-facing death sprite sheet.
+  /// The picture for dying, facing right.
   final String deathRight;
 
-  /// Number of frames in the death sheet.
+  /// How many frames are in the dying picture.
   final int deathFrames;
 }
