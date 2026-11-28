@@ -24,4 +24,10 @@ class _GameScreenState extends State<GameScreen> {
       color: Colors.green,
     );
   }
+
+  /// Runs when the screen closes. Like tidying up before you leave a room.
+  @override
+  void dispose() {
+    super.dispose();
+  }
 }
