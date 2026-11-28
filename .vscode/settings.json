@@ -1,3 +1,4 @@
 {
-  "dart.flutterShowWebServerDevice": "always"
+  "dart.flutterShowWebServerDevice": "always",
+  "dart.flutterSdkPath": "/Users/treyhope/.puro/envs/default/flutter"
 }
